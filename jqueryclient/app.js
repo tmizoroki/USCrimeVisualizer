@@ -5,8 +5,6 @@
 // that match to the current time on the clock
 var dataStorage = {};
 
-var category = {};
-
 // the variable now is the current data-time-group
 // which shows where the clock is currently at
 var projection, now;
