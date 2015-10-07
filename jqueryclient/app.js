@@ -52,7 +52,7 @@ var renderPoints = function (data, callback) {
   // with different params 
   var coord;
   // add circles to svg
-  var svg = d3.select("#map").selectAll("svg");
+  var svg = d3.select("#map").selectAll("svg").append("g");
   // tooltip element is invisible by default
   var tooltip = d3.select("body").append("div") 
       .attr("class", "tooltip")       
@@ -61,6 +61,8 @@ var renderPoints = function (data, callback) {
   // this is where the magic happens 
   // 'glues' the dots to the map
   // d3 is smart enough to know where to put the dots based on lat and longitude
+  //var zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoomed);
+
   svg.selectAll("circle")
   .remove()
   .data(data).enter()
@@ -91,7 +93,8 @@ var renderPoints = function (data, callback) {
           .style("opacity", 0); 
       svg.selectAll('circle')
       .attr("r", "3px");
-  });
+  })
+
   callback();
 };
 
@@ -127,10 +130,10 @@ var render = function () {
   // allow for zooming functionality
   var zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoomed);
   // Creates the map svg
-  var svg = d3.select('#map').append("svg").attr("width", width).attr("height", height)
+  var svg = d3.select('#map').append("svg").attr('class',"mapcomp").attr("width", width).attr("height", height)
     .append("g")
     .call(zoom)
-    .append("g");
+    //.append("g");
      
 
   // Map of San Francisco
@@ -164,10 +167,14 @@ var render = function () {
   // the current implementation also does not have a zoom event
   // work for the dots on the map
   function zoomed () {
-      svg.attr("transform",
-          "translate(" + zoom.translate() + ")" +
+      // svg.attr("transform",
+      //     "translate(" + zoom.translate() + ")" +
+      //     "scale(" + zoom.scale() + ")"
+      // );
+      var g = d3.select(".mapcomp").selectAll("g");
+        g.attr("transform","translate(" + zoom.translate() + ")" +
           "scale(" + zoom.scale() + ")"
-      );
+          );
   }
 
   function interpolateZoom (translate, scale) {
