@@ -31,6 +31,12 @@ var minToHHMM = function(min) {
   var minute = min % 60;
   return {hour: hour, minute: minute}
 };
+
+var hhmmToMin = function(hour, minute) {
+  return (hour * 60) + minute;
+}
+
+// Change the clock display when the slider is being boved
 $('#time').on('input', function() {
   sliderTime =  minToHHMM(parseInt(this.value));
   modifyClock(sliderTime.hour, sliderTime.minute);
@@ -362,6 +368,11 @@ function modifyClock (hours, minutes) {
   separator.classed("lit", minutes);
 }
 
+function modifySlider (hour, minute) {
+  var min = hhmmToMin(hour, minute);
+  $('#time').val(min);
+}
+
 function tick (dtg) {
 
   now = new Date(dtg);
@@ -376,6 +387,7 @@ function tick (dtg) {
   seconds = now.getSeconds();
 
   modifyClock(hours, minutes);
+  modifySlider(hours, minutes);
 
   // if play is pressed, then the clock will increase by one minute
   if (play) {
