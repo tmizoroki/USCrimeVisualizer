@@ -9,6 +9,24 @@ var dataStorage = {};
 // which shows where the clock is currently at
 var projection, now;
 
+// Zoom behavior of map
+var zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoomed);
+
+// Zoom function
+function zoomed () {
+  var size = 3/zoom.scale() + 'px';
+
+  var g = d3.select("#mapcomp").selectAll("g");
+  g.selectAll("circle").attr("r", function(d){
+    if(d3.select(this).attr("r") !== '0px'){
+      return size;
+    } else {
+      return '0px';
+    }
+  });
+  g.attr("transform","translate(" + zoom.translate() + ")" + "scale(" + zoom.scale() + ")")
+}
+
 // we have a default playback speed for showing events
 // but it can be changed
 var playbackSpeed = 800;
@@ -31,12 +49,6 @@ var minToHHMM = function(min) {
   var minute = min % 60;
   return {hour: hour, minute: minute}
 };
-
-var hhmmToMin = function(hour, minute) {
-  return (hour * 60) + minute;
-}
-
-// Change the clock display when the slider is being boved
 $('#time').on('input', function() {
   sliderTime =  minToHHMM(parseInt(this.value));
   modifyClock(sliderTime.hour, sliderTime.minute);
@@ -79,44 +91,44 @@ var renderPoints = function (data, callback) {
   var tooltip = d3.select("body").append("div") 
       .attr("class", "tooltip")       
       .style("opacity", 0);
+      
   // add dots to svg
   // this is where the magic happens 
   // 'glues' the dots to the map
   // d3 is smart enough to know where to put the dots based on lat and longitude
-  //var zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoomed);
-
   svg.selectAll("circle")
-  .remove()
-  .data(data).enter()
-  .append("circle")
-  .attr("cx", function (d) {
-    coord = [d.X, d.Y];
-    return projection(coord)[0]; 
-  })
-  .attr("cy", function (d) { 
-    coord = [d.X, d.Y];
-    return projection(coord)[1]; 
-  })
-  .style("fill", function(d){return category_color(d.Category);})
-  .attr("r", "3px")
-  .on("mouseover", function(d) {
-      // render tooltip when hovering over a crime 
-      tooltip.transition()    
-         .duration(200)    
-         .style("opacity", .9);    
-      tooltip.html("<p>"+d.Category+"</p>" + "<p>"+ d.Address+"</p>")
+    .remove()
+    .data(data).enter()
+    .append("circle")
+    .attr("cx", function (d) {
+      coord = [d.X, d.Y];
+      return projection(coord)[0]; 
+    })
+    .attr("cy", function (d) { 
+      coord = [d.X, d.Y];
+      return projection(coord)[1]; 
+    })
+    .style("fill", function(d){return category_color(d.Category);})
+    .attr("r", 3/zoom.scale())
+    .style("stroke-width", 0)
+    .on("mouseover", function(d) {
+        // render tooltip when hovering over a crime 
+        tooltip.transition()    
+           .duration(200)    
+           .style("opacity", .9);    
+        tooltip.html("<p>"+d.Category+"</p>" + "<p>"+ d.Address+"</p>")
 
-        .style("left", (d3.event.pageX) + "px")   
-        .style("top", (d3.event.pageY - 28) + "px");
-      })          
-  .on("mouseout", function(d) {   
-      // make tooltip invisible when user stops hovering over dot  
-      tooltip.transition()    
-          .duration(500)    
-          .style("opacity", 0); 
-      svg.selectAll('circle')
-      .attr("r", "3px");
-  })
+          .style("left", (d3.event.pageX) + "px")   
+          .style("top", (d3.event.pageY - 28) + "px");
+        })          
+    .on("mouseout", function(d) {   
+        // make tooltip invisible when user stops hovering over dot  
+        tooltip.transition()    
+            .duration(500)    
+            .style("opacity", 0); 
+        // svg.selectAll('circle')
+        // .attr("r", ); //"3px");
+    })
 
   callback();
 };
@@ -150,16 +162,12 @@ var render = function () {
   // Renders the map (districts outline) into the city div. 
   var width = .9 * window.innerWidth, height = .9 * window.innerHeight;
   
-  // allow for zooming functionality
-  var zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoomed);
   // Creates the map svg
   var svg = d3.select('#map').append("svg").attr('id',"mapcomp")
   .attr("width", width * 0.8).attr("height", height * 0.8)
     .append("g")
       .attr("id","grouped")
-    .call(zoom);
- 
-     
+    .call(zoom);   
 
   // Map of San Francisco
   projection = d3.geo.mercator().scale(1).translate([0, 0]).precision(0);
@@ -186,17 +194,6 @@ var render = function () {
   $('svg path').hover(function() {
     $("#district").text($(this).data("name"));
   });
-
-  // functions that handle the zoom functionality
-  // there is probably a better way to separate these out
-  // the current implementation also does not have a zoom event
-  // work for the dots on the map
-  function zoomed () {
-      var g = d3.select("#mapcomp").selectAll("g");
-        g.attr("transform","translate("+ zoom.translate() + ")" +
-          "scale(" + zoom.scale() + ")"
-          );
-  }
 
   function interpolateZoom (translate, scale) {
       return d3.transition().duration(350).tween("zoom", function () {
@@ -269,7 +266,7 @@ var category_color = function(category){
   category = category.toLowerCase();
   colors['person'] = '#FF0000';
   colors['society'] = '#00FF00';
-  colors['property'] = '#0000FF'
+  colors['property'] = '#0000FF';
   switch(category){
     case 'assault':
       return colors['person'];
@@ -322,7 +319,7 @@ var category_color = function(category){
     case 'bribery':
       return colors['property'];
       break;
-    case 'buglary':
+    case 'burglary':
       return colors['property'];
       break;
     case 'embezzlement':
@@ -334,7 +331,7 @@ var category_color = function(category){
     case 'fraud':
       return colors['property'];
       break;
-    case 'larcency/theft':
+    case 'larceny/theft':
       return colors['property'];
       break;
     case 'robbery':
@@ -368,11 +365,6 @@ function modifyClock (hours, minutes) {
   separator.classed("lit", minutes);
 }
 
-function modifySlider (hour, minute) {
-  var min = hhmmToMin(hour, minute);
-  $('#time').val(min);
-}
-
 function tick (dtg) {
 
   now = new Date(dtg);
@@ -387,7 +379,6 @@ function tick (dtg) {
   seconds = now.getSeconds();
 
   modifyClock(hours, minutes);
-  modifySlider(hours, minutes);
 
   // if play is pressed, then the clock will increase by one minute
   if (play) {

@@ -22,19 +22,20 @@ var makeCategories = function (data) {
   // select svg from html
   var svg = d3.select("#mapcomp");
   // on hover display only those crimes within that category
-  $(".category").mouseenter(function () {
-    console.log(svg)
+  $(".category").click(function () {
     var category = $(this).text().split(" ")[0];
     svg.selectAll("circle")
     .each(function(d) {
       if(d.Category !== category) {
-        d3.select(this).attr("r", "0px")
+        d3.select(this).attr("r", "0px");
+      } else {
+        d3.select(this).attr("r", 3/zoom.scale()+"px");
       }
     })
   });
   // restore back to a map with all crimes on mouse leave
-  $(".category").mouseleave(function () {
-    svg.selectAll("circle")
-    .attr("r", "3px");
-  });
+  // $(".category").mouseleave(function () {
+  //   svg.selectAll("circle")
+  //   .attr("r", "3px");
+  // });
 };
