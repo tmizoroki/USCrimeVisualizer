@@ -16,7 +16,11 @@ body, html {
 
 #map {
   color: white;
+<<<<<<< HEAD
 /*  text-align: center;*/
+=======
+  text-align: center;
+>>>>>>> (style) mapPosition
   /*position: relative;*/
   /*margin-bottom: 150px;*/
 /*  margin-left: 0%;*/
