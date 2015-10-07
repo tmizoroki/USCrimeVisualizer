@@ -20,6 +20,22 @@ var play = false;
 // monthData will hold the entire data after a month's worth of data
 // is fetched
 var monthData;
+
+
+var sliderTime = {hour: 0, minute: 0};
+var sliderMoved = false;
+
+// converts value in range slider to hours and minutes.
+var minToHHMM = function(min) {
+  var hour = Math.floor( min / 60);
+  var minute = min % 60;
+  return {hour: hour, minute: minute}
+};
+$('#time').on('input', function() {
+  sliderTime =  minToHHMM(parseInt(this.value));
+  modifyClock(sliderTime.hour, sliderTime.minute);
+  sliderMoved = true;
+});
  
 var storeData = function (data) {
   dataStorage = {}; // clear out old data storage when this function is run
@@ -335,23 +351,33 @@ var category_color = function(category){
   }
 }
 
-function tick (dtg) {
-    now = new Date(dtg),
-        hours = now.getHours(),
-        minutes = now.getMinutes(),
-        seconds = now.getSeconds();
-    
+function modifyClock (hours, minutes) {
+  // modifies the look of the clock as it increases
+  digit = digit.data([hours / 10 | 0, hours % 10, minutes / 10 | 0, minutes % 10, seconds / 10 | 0, seconds % 10]);
+  digit.select("path:nth-child(1)").classed("lit", function(d) { return digitPattern[0][d]; });
+  digit.select("path:nth-child(2)").classed("lit", function(d) { return digitPattern[1][d]; });
+  digit.select("path:nth-child(3)").classed("lit", function(d) { return digitPattern[2][d]; });
+  digit.select("path:nth-child(4)").classed("lit", function(d) { return digitPattern[3][d]; });
+  digit.select("path:nth-child(5)").classed("lit", function(d) { return digitPattern[4][d]; });
+  digit.select("path:nth-child(6)").classed("lit", function(d) { return digitPattern[5][d]; });
+  digit.select("path:nth-child(7)").classed("lit", function(d) { return digitPattern[6][d]; });
+  separator.classed("lit", minutes);
+}
 
-    // modifies the look of the clock as it increases
-    digit = digit.data([hours / 10 | 0, hours % 10, minutes / 10 | 0, minutes % 10, seconds / 10 | 0, seconds % 10]);
-    digit.select("path:nth-child(1)").classed("lit", function(d) { return digitPattern[0][d]; });
-    digit.select("path:nth-child(2)").classed("lit", function(d) { return digitPattern[1][d]; });
-    digit.select("path:nth-child(3)").classed("lit", function(d) { return digitPattern[2][d]; });
-    digit.select("path:nth-child(4)").classed("lit", function(d) { return digitPattern[3][d]; });
-    digit.select("path:nth-child(5)").classed("lit", function(d) { return digitPattern[4][d]; });
-    digit.select("path:nth-child(6)").classed("lit", function(d) { return digitPattern[5][d]; });
-    digit.select("path:nth-child(7)").classed("lit", function(d) { return digitPattern[6][d]; });
-    separator.classed("lit", minutes);
+function tick (dtg) {
+
+  now = new Date(dtg);
+
+  if (sliderMoved) {
+    now.setHours(sliderTime.hour, sliderTime.minute);
+    sliderMoved = false;
+  }
+
+  hours = now.getHours();
+  minutes = now.getMinutes();
+  seconds = now.getSeconds();
+
+  modifyClock(hours, minutes);
 
   // if play is pressed, then the clock will increase by one minute
   if (play) {
