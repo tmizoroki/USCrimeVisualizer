@@ -133,16 +133,17 @@ var render = function () {
   // Creates the map svg
   var svg = d3.select('#map').append("svg").attr('id',"mapcomp").attr("width", width).attr("height", height)
     .append("g")
-    .call(zoom)
-    //.append("g");
+      .attr("transform","translate(-200,0)" + "scale(0.8,0.8)")
+    .call(zoom);
+ 
      
 
   // Map of San Francisco
   projection = d3.geo.mercator().scale(1).translate([0, 0]).precision(0);
   var path = d3.geo.path().projection(projection);
-
   // gsfmap is a global variable from map/map.js
   var bounds = path.bounds(gsfmap);
+
 
   xScale = width / Math.abs(bounds[1][0] - bounds[0][0]);
   yScale = height / Math.abs(bounds[1][1] - bounds[0][1]);
