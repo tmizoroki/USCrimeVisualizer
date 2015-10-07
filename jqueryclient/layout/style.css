@@ -16,7 +16,7 @@ body, html {
 
 #map {
   color: white;
-  text-align: center;
+/*  text-align: center;*/
   /*position: relative;*/
   /*margin-bottom: 150px;*/
 /*  margin-left: 0%;*/
@@ -60,7 +60,6 @@ body, html {
   /*position: absolute;*/
   min-height: 1000px;
   height: 100%;
-  width: 250px;
   padding-top: 30px;
   background-color: rgba(0, 0, 0, 0.19);
   /*height: 800px;*/
@@ -114,7 +113,16 @@ body, html {
   text-align: center;
 }
 
+.mapcomp {
+  border: 1px solid;
+  border-color: turquoise;
+}
 
+#grouped {
+  stroke: turquoise;
+  stroke-width: 1.5px;
+
+}
 #bannerFoot {
   /*position: absolute;*/
   width: 100%;
