@@ -10,15 +10,14 @@ body, html {
 }
 
 .category {
-  font-size: 20px;
+  font-size: 17px;
+  margin-left: 0px;
 }
 
 #map {
   color: white;
-  text-align: center;
-
+/*  text-align: center;*/
   /*position: relative;*/
-  /*margin-left: 5%;*/
   /*margin-bottom: 150px;*/
 /*  margin-left: 0%;*/
 }
@@ -61,7 +60,6 @@ body, html {
   /*position: absolute;*/
   min-height: 1000px;
   height: 100%;
-  /*width: 250px;*/
   padding-top: 30px;
   background-color: rgba(0, 0, 0, 0.19);
   /*height: 800px;*/
@@ -115,6 +113,14 @@ body, html {
   text-align: center;
 }
 
+#mapcomp {
+  border: 1px solid;
+  border-color: turquoise;
+}
+
+#grouped {
+  stroke: turquoise;
+  stroke-width: 1.5px;
 
 #bannerFoot {
   /*position: absolute;*/
@@ -133,13 +139,16 @@ body, html {
 }
 
 svg {
-  margin: 20px;
   fill: rgba(31, 29, 29, 0);
   stroke: rgba(255, 255, 255, 0.32);
 }
 
 svg circle {
   fill: rgba(11, 134, 224, 0.81);
+}
+
+path {
+  top: 10px;
 }
 
 path {
@@ -209,7 +218,9 @@ path:hover {
 #zoomButtons ul li {
   display: inline-block;
 }
-
+#overlay {
+  top: 10px;
+}
 #overlay path,
 #overlay circle {
   fill: #222;
@@ -227,7 +238,7 @@ path:hover {
   width: 15%;
   position: relative;
   top: 2%;
-  left: 40%;
+  left: 28%;
 }
 
 #play, 
@@ -264,6 +275,7 @@ button.active {
 #district {
   font-size: 20px;
   height: 45px;
+  margin-bottom: 50px;
 }
 
 div.tooltip { 
@@ -277,6 +289,10 @@ div.tooltip {
     border: 0px;    
     border-radius: 5px;     
     pointer-events: none;     
+}
+
+#graph {
+  float: bottom;
 }
 
 #graph>.axis path,
@@ -293,7 +309,7 @@ div.tooltip {
 .line {
   fill: none;
   stroke: steelblue;
-  stroke-width: 1.5px;
+  stroke-width: 2px;
 }
 
 .overlay {
@@ -306,8 +322,12 @@ div.tooltip {
   stroke: steelblue;
 }
 
-#category {
+#category {x
   display:block;
   position: relative;
   margin-top: 40px;
+  font-size: 20px;
+}
+#category:hover {
+  color:red;
 }
