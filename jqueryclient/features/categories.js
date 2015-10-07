@@ -20,9 +20,10 @@ var makeCategories = function (data) {
     $(".categories").append("<dd class=\"category\">" + value[0] + " " + value[1] + "</dd>");
   });
   // select svg from html
-  var svg = d3.select("#map").selectAll("svg");
+  var svg = d3.select("#mapcomp");
   // on hover display only those crimes within that category
   $(".category").mouseenter(function () {
+    console.log(svg)
     var category = $(this).text().split(" ")[0];
     svg.selectAll("circle")
     .each(function(d) {
