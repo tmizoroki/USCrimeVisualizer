@@ -5,6 +5,8 @@
 // that match to the current time on the clock
 var dataStorage = {};
 
+var category = {};
+
 // the variable now is the current data-time-group
 // which shows where the clock is currently at
 var projection, now;
@@ -52,7 +54,7 @@ var renderPoints = function (data, callback) {
   // with different params 
   var coord;
   // add circles to svg
-  var svg = d3.select("#map").selectAll("svg").append("g");
+  var svg = d3.select("#map").selectAll("svg").append("g").attr("id","datapoints");
   // tooltip element is invisible by default
   var tooltip = d3.select("body").append("div") 
       .attr("class", "tooltip")       
@@ -75,6 +77,7 @@ var renderPoints = function (data, callback) {
     coord = [d.X, d.Y];
     return projection(coord)[1]; 
   })
+  .style("fill", function(d){return category_color(d.Category);})
   .attr("r", "3px")
   .on("mouseover", function(d) {
       // render tooltip when hovering over a crime 
@@ -130,7 +133,7 @@ var render = function () {
   // allow for zooming functionality
   var zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoomed);
   // Creates the map svg
-  var svg = d3.select('#map').append("svg").attr('class',"mapcomp").attr("width", width).attr("height", height)
+  var svg = d3.select('#map').append("svg").attr('id',"mapcomp").attr("width", width).attr("height", height)
     .append("g")
     .call(zoom)
     //.append("g");
@@ -242,6 +245,97 @@ var digitPattern = [
   [1,1,0,1,1,1,1,1,1,1],
   [1,0,1,1,0,1,1,0,1,1]
 ];
+
+var category_color = function(category){
+  var colors = {};
+  category = category.toLowerCase();
+  colors['person'] = '#FF0000';
+  colors['society'] = '#00FF00';
+  colors['property'] = '#0000FF'
+  switch(category){
+    case 'assault':
+      return colors['person'];
+      break;
+    case 'kidnapping':
+      return colors['person'];
+      break;
+    case 'sex offenses, forcible':
+      return colors['person'];
+      break;
+    case 'sex offenses, nonforcible':
+      return colors['person'];
+      break;
+    case 'disorderly conduct':
+      return colors['society'];
+      break;
+    case 'driving under the influence':
+      return colors['society'];
+      break;
+    case 'drug/narcotic':
+      return colors['society'];
+      break;
+    case 'drunkness':
+      return colors['society'];
+      break;
+    case 'family offenses':
+      return colors['society'];
+      break;
+    case 'liquor laws':
+      return colors['society'];
+      break;
+    case 'loitering':
+      return colors['society'];
+      break;
+    case 'prostitution':
+      return colors['society'];
+      break;
+    case 'trespass':
+      return colors['society'];
+      break;
+    case 'weapon laws':
+      return colors['society'];
+      break;
+    case 'arson':
+      return colors['property'];
+      break;
+    case 'bad checks':
+      return colors['property'];
+      break;
+    case 'bribery':
+      return colors['property'];
+      break;
+    case 'buglary':
+      return colors['property'];
+      break;
+    case 'embezzlement':
+      return colors['property'];
+      break;
+    case 'forgery/counterfeiting':
+      return colors['property'];
+      break;
+    case 'fraud':
+      return colors['property'];
+      break;
+    case 'larcency/theft':
+      return colors['property'];
+      break;
+    case 'robbery':
+      return colors['property'];
+      break;
+    case 'stolen property':
+      return colors['property'];
+      break;
+    case 'vandalism':
+      return colors['property'];
+      break;
+    case 'vehicle theft':
+      return colors['property'];
+      break;
+    default:
+      return '#808080'
+      break;
+  }
+}
 
 function tick (dtg) {
     now = new Date(dtg),
