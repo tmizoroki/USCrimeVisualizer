@@ -113,7 +113,7 @@ body, html {
   text-align: center;
 }
 
-.mapcomp {
+#mapcomp {
   border: 1px solid;
   border-color: turquoise;
 }
@@ -239,7 +239,7 @@ path:hover {
   width: 15%;
   position: relative;
   top: 2%;
-  left: 80%;
+  left: 28%;
 }
 
 #play, 

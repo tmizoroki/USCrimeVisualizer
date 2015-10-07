@@ -147,7 +147,7 @@ var render = function () {
   // allow for zooming functionality
   var zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoomed);
   // Creates the map svg
-  var svg = d3.select('#map').append("svg").attr('class',"mapcomp")
+  var svg = d3.select('#map').append("svg").attr('id',"mapcomp")
   .attr("width", width * 0.8).attr("height", height * 0.8)
     .append("g")
       .attr("id","grouped")
@@ -157,17 +157,13 @@ var render = function () {
 
   // Map of San Francisco
   projection = d3.geo.mercator().scale(1).translate([0, 0]).precision(0);
-  console.log(d3.geo.mercator().scale(1).translate([0, 0]).precision(0));
   var path = d3.geo.path().projection(projection);
-  console.log(path);
   // gsfmap is a global variable from map/map.js
   var bounds = path.bounds(gsfmap);
 
 
   xScale = width / Math.abs(bounds[1][0] - bounds[0][0]);
   yScale = height / Math.abs(bounds[1][1] - bounds[0][1]);  
-  console.log(xScale, yScale);
-  console.log(width, height);
   scale = xScale < yScale ? xScale : yScale;
 
   var transl = [(width - scale * (bounds[1][0] + bounds[0][0])) / 2, (height - scale * (bounds[1][1] + bounds[0][1])) / 2];
@@ -190,7 +186,7 @@ var render = function () {
   // the current implementation also does not have a zoom event
   // work for the dots on the map
   function zoomed () {
-      var g = d3.select(".mapcomp").selectAll("g");
+      var g = d3.select("#mapcomp").selectAll("g");
         g.attr("transform","translate("+ zoom.translate() + ")" +
           "scale(" + zoom.scale() + ")"
           );
