@@ -106,10 +106,12 @@ var graphs = function (data) {
       d = x0 - d0 > d1 - x0 ? d1 : d0;
 
     focus.attr("transform", "translate(" + x(d.Date) + "," + y(d.count) + ")");
-    focus.select("text").text( d.count + ' crimes committed in '+ parseFullDate(d.Date));
+    focus.select("text").text(parseFullDate(d.Date));
 
     if (mouseoverGraphState) {
       updateSidebar(d);
+      d3.select("#totalCrimes")
+        .text(d.count + ' crimes committed in '+ parseFullDate(d.Date));
     }
   };
 
@@ -129,6 +131,9 @@ var graphs = function (data) {
       d = x0 - d0 > d1 - x0 ? d1 : d0;
 
     updateSidebar(d);
+
+    d3.select("#totalCrimes")
+      .text(d.count + ' crimes committed in '+ parseFullDate(d.Date));
 
     getData(function (data) {
       data = JSON.parse(data);
