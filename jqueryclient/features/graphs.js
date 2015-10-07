@@ -5,7 +5,7 @@ var graphs = function (data) {
 
   // Parse the date / time
   var parseDate = d3.time.format("%Y-%m");
-  var parseFullDate = d3.time.format("%B of %Y")
+  var parseFullDate = d3.time.format("%B of %Y");
 
   // Set the ranges
   var x = d3.time.scale().range([0, width]);
@@ -36,7 +36,7 @@ var graphs = function (data) {
   // Get the data
   data.forEach(function (d) {
   d.Date = parseDate.parse(d._id.Date);
-  d.count = +d.count
+  d.count = +d.count;
   });
 
   data.sort(function (a, b) {
@@ -77,19 +77,40 @@ var graphs = function (data) {
   focus.append("text")
     .attr("x", 9)
     .attr("dy", ".35em")
-    .attr("fill", "#8A9194")
+    .attr("fill", "#8A9194");
   // stuff happens here
+
+  var mouseoverGraphState = true;
+
+  var findX = function() {
+    var x0 = x.invert(d3.mouse(this)[0]),
+      i = bisectDate(data, x0, 1),
+      d0 = data[i - 1],
+      d1 = data[i],
+      d = x0 - d0 > d1 - x0 ? d1 : d0;
+
+    return d;
+  };
+
+  var updateSidebar = function(d) {
+    $.get('api/categories/date=' + parseDate(d.Date), function (data) {
+      makeCategories(JSON.parse(data));
+    });
+  };
+
   var mousemove = function () {
     var x0 = x.invert(d3.mouse(this)[0]),
       i = bisectDate(data, x0, 1),
       d0 = data[i - 1],
       d1 = data[i],
       d = x0 - d0 > d1 - x0 ? d1 : d0;
+
     focus.attr("transform", "translate(" + x(d.Date) + "," + y(d.count) + ")");
     focus.select("text").text( d.count + ' crimes committed in '+ parseFullDate(d.Date));
-    $.get('api/categories/date=' + parseDate(d.Date), function (data) {
-      makeCategories(JSON.parse(data));
-    });
+
+    if (mouseoverGraphState) {
+      updateSidebar(d);
+    }
   };
 
   // clock event to show all the events from that month
@@ -99,13 +120,16 @@ var graphs = function (data) {
     });
   });
 
-
   var click = function () {
+    mouseoverGraphState = false;
     var x0 = x.invert(d3.mouse(this)[0]),
       i = bisectDate(data, x0, 1),
       d0 = data[i - 1],
       d1 = data[i],
       d = x0 - d0 > d1 - x0 ? d1 : d0;
+
+    updateSidebar(d);
+
     getData(function (data) {
       data = JSON.parse(data);
       var date = new Date(d.Date);
@@ -121,7 +145,8 @@ var graphs = function (data) {
     .on("mouseout", function() { focus.style("display", "none"); })
     .on("mousemove", mousemove)
     .on("click", click);
-}
+};
+
 // invoke the above function 
 $.get('/api/graphs', function (data) {
   graphs(JSON.parse(data));
