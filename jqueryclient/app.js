@@ -159,6 +159,7 @@ var render = function () {
   projection = d3.geo.mercator().scale(1).translate([0, 0]).precision(0);
   console.log(d3.geo.mercator().scale(1).translate([0, 0]).precision(0));
   var path = d3.geo.path().projection(projection);
+  console.log(path);
   // gsfmap is a global variable from map/map.js
   var bounds = path.bounds(gsfmap);
 
