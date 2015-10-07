@@ -160,14 +160,19 @@ var animatePoints = function(svg) {
 
 var render = function () {
   // Renders the map (districts outline) into the city div. 
-  var width = .9 * window.innerWidth, height = .9 * window.innerHeight;
+  var width = .7 * window.innerWidth;
+  var height = .9 * window.innerHeight;
   
+  // allow for zooming functionality
+  var zoom = d3.behavior.zoom()
+      .scaleExtent([1, 8])
+      .on("zoom", zoomed);
   // Creates the map svg
   var svg = d3.select('#map').append("svg").attr('id',"mapcomp")
-  .attr("width", width * 0.8).attr("height", height * 0.8)
-    .append("g")
-      .attr("id","grouped")
-    .call(zoom);   
+  .attr("width", "70%").attr("height", "70%")
+  .attr('viewBox', "0 0 " + width + " " + height + "")
+    .call(zoom);
+ 
 
   // Map of San Francisco
   projection = d3.geo.mercator().scale(1).translate([0, 0]).precision(0);
@@ -180,15 +185,23 @@ var render = function () {
   yScale = height / Math.abs(bounds[1][1] - bounds[0][1]);  
   scale = xScale < yScale ? xScale : yScale;
 
-  var transl = [(width - scale * (bounds[1][0] + bounds[0][0])) / 2, (height - scale * (bounds[1][1] + bounds[0][1])) / 2];
-  projection.scale(scale).translate(transl);
 
+  var transl = [(width - scale * (bounds[1][0] + bounds[0][0])) / 2, (height - scale * (bounds[1][1] + bounds[0][1])) / 2];
+  // transl[0] -= 350;
+  // transl[1] -= 100;
+  // var transl = [695371.1539372412, 232135.6735346407];
+  projection.scale(scale).translate(transl);
   // shows district information on top of map when hovering over it
-  svg.selectAll("path").data(gsfmap.features).enter().append("path").attr("d", path).attr('data-id', function(d) {
+  svg.append("g")
+      .attr("id","grouped").
+      selectAll("path").data(gsfmap.features).enter().append("path").attr("d", path).attr('data-id', function(d) {
     return d.id;
   }).attr('data-name', function(d) {
     return d.properties.name;
   });
+
+
+
 
   // displays the district name that you're hovering on on the map 
   $('svg path').hover(function() {
