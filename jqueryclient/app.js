@@ -163,10 +163,6 @@ var render = function () {
   var width = .7 * window.innerWidth;
   var height = .9 * window.innerHeight;
   
-  // allow for zooming functionality
-  var zoom = d3.behavior.zoom()
-      .scaleExtent([1, 8])
-      .on("zoom", zoomed);
   // Creates the map svg
   var svg = d3.select('#map').append("svg").attr('id',"mapcomp")
   .attr("width", "70%").attr("height", "70%")
