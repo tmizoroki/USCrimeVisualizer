@@ -1,6 +1,6 @@
 var graphs = function (data) {
   var margin = {top: 30, right: 100, bottom: 30, left: 60},
-  width = window.innerWidth - 250 - margin.left - margin.right,
+  width = window.innerWidth - 300 - margin.left - margin.right,
   height = 180 - margin.top - margin.bottom;
 
   // Parse the date / time

@@ -9,6 +9,14 @@ body, html {
   min-height: 500px;
 }
 
+#main > .row {
+  margin-bottom: 0;
+}
+
+#dataVis {
+  padding-left: 1rem;
+}
+
 .category {
   font-size: 17px;
   margin-left: 0px;
@@ -16,24 +24,13 @@ body, html {
 
 #map {
   color: white;
-/*  text-align: center;*/
-  /*position: relative;*/
-  /*margin-bottom: 150px;*/
-/*  margin-left: 0%;*/
 }
 
 #clockboard, #clock {
   margin-left: -50%;
-  /*padding-left: 40%;*/
-
 }
 
 #graph {
-  /*float: left;*/
-  /*margin-left: -1%;*/
-  /*background-color: #181818;*/
-  /*width: 100%;*/
-  /*padding: 10px 10px 10px 0px;*/
   text-align: center;
 }
 
@@ -41,11 +38,8 @@ body, html {
 #categories button,
 #months button {
   width: 7.65%;
-  /*width: 9%;*/
-  /*margin-left: 0;*/
   background-color: black;
   border: 1px solid #212121;
-
 }
 
 #timeline button:hover,
@@ -54,33 +48,21 @@ body, html {
   background-color: rgba(30, 136, 229, 0.85);
 }
 
-
+.row .col {
+  padding: 0;
+}
 
 #sidebar {
-  /*position: absolute;*/
   min-height: 1000px;
   height: 100%;
-  padding-top: 30px;
-  background-color: rgba(0, 0, 0, 0.19);
-  /*height: 800px;*/
-  margin-top: 0;
-  /*margin-left: 20px;*/
-  
+  padding: 2rem .75rem;
+  background-color: #00001b;
+  margin-top: 0;  
 }
 
-#sidebar form {
-  /*background-color: #fcfcfc;*/
-  /*background-color: rgba(200,200,200,0.09);*/
-  /*margin-bottom: 40px;
-  margin-left: 30px;
-  margin-top: 10%;*/
-  
+#sidebar form {  
   padding: 10px;
   border-radius: 2px;
-}
-
-#dataVis {
-
 }
 
 #neighborhood {
@@ -124,9 +106,7 @@ body, html {
 }
 
 #bannerFoot {
-  /*position: absolute;*/
   width: 100%;
-  /*margin-top: -10px;*/
   bottom: 0;
   background-color: rgba(6, 4, 4, 0.6);
   padding: 0 20px;
@@ -150,9 +130,6 @@ svg circle {
 
 path {
   top: 10px;
-}
-
-path {
   fill: #101010;
 }
 
@@ -197,19 +174,12 @@ path:hover {
   background-color: rgba(30, 136, 229, 1)
 }
 
-#zoomButtons {
-  /*position: absolute;*/
-  /*text-align: right;*/
-  /*top: 2%;*/
-  /*right: 2%;*/
-}
-
 #zoomButtons button {
   padding: 3px 15px;
-  margin-left: 2.5px;
-  margin-right: 2.5px;
+  margin-right: 5px;
   background-color: rgba(30, 136, 229, 0.85);
-  border: 1px solid grey;
+  border: 0;
+  border-radius: 2px;
 }
 
 #zoomButtons button:hover {
@@ -245,9 +215,9 @@ path:hover {
 #play, 
 #pause,
 #speedup {
+  cursor: pointer;
   text-decoration: none;
   color: white;
-
 }
 
 #play:hover, 
@@ -260,30 +230,15 @@ path:hover {
   display: none;
 }
 
-/*button {
-  background-color: black;
-  border: 2 px;
-  border-color: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.4);
-}
-button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-button.active {
-  background-color: rgba(255, 255, 255, 0.1);
-}*/
-
 #district {
   font-size: 20px;
   height: 45px;
-  margin-bottom: 50px;
+  margin-bottom: 1.5rem;
 }
 
 div.tooltip { 
     position: absolute;     
     text-align: center;     
-    /*width: 70px;          */
- /*   height: 35px; */        
     padding: 5px;       
     font: 12px sans-serif;    
     background: rgba(30, 136, 229, 0.92);
@@ -299,7 +254,6 @@ div.tooltip {
 #graph>.axis path,
 #graph>.axis line {
   fill: none;
-  /*stroke: #000;*/
   shape-rendering: crispEdges;
 }
 
@@ -323,12 +277,20 @@ div.tooltip {
   stroke: steelblue;
 }
 
-#category {x
+#totalCrimes {
+  text-align: center;
+}
+
+#category {
   display:block;
   position: relative;
   margin-top: 40px;
   font-size: 20px;
 }
+
 #category:hover {
   color:red;
 }
+
+
+
