@@ -35,13 +35,14 @@ var graphs = function (data) {
 
   // Get the data
   data.forEach(function (d) {
-  d.Date = parseDate.parse(d._id.Date);
-  d.count = +d.count;
+    d.Date = parseDate.parse(d._id.Date);
+    d.count = +d.count;
   });
 
   data.sort(function (a, b) {
-  return a.Date-b.Date;
+    return a.Date-b.Date;
   });
+
   // Scale the range of the data
   x.domain(d3.extent(data, function(d) { return d.Date; }));
   y.domain([d3.min(data, function(d) { return d.count; }), d3.max(data, function(d) { return d.count; })]);
@@ -67,6 +68,7 @@ var graphs = function (data) {
 
   var bisectDate = d3.bisector(function(d) { return d.Date; }).left;
 
+  // graph label that shifts with mouse
   var focus = svg.append("g")
     .attr("class", "focus")
     .style("display", "none");
@@ -78,19 +80,22 @@ var graphs = function (data) {
     .attr("x", 9)
     .attr("dy", ".35em")
     .attr("fill", "#8A9194");
-  // stuff happens here
 
-  var mouseoverGraphState = true;
+  // graph label that is fixed on click
+  var selectedMonth = svg.append("g")
+    .attr("class", "selectedMonth")
+    .style("display", "none");
 
-  var findX = function() {
-    var x0 = x.invert(d3.mouse(this)[0]),
-      i = bisectDate(data, x0, 1),
-      d0 = data[i - 1],
-      d1 = data[i],
-      d = x0 - d0 > d1 - x0 ? d1 : d0;
+  selectedMonth.append("circle")
+    .attr("r", 4.5);
 
-    return d;
-  };
+  selectedMonth.append("text")
+    .attr("x", 9)
+    .attr("dy", ".35em")
+    .attr("fill", "#8A9194");
+
+  // determines if categories will update as graph is moused over
+  var updateCategories = true;
 
   var updateSidebar = function(d) {
     $.get('api/categories/date=' + parseDate(d.Date), function (data) {
@@ -108,7 +113,7 @@ var graphs = function (data) {
     focus.attr("transform", "translate(" + x(d.Date) + "," + y(d.count) + ")");
     focus.select("text").text(parseFullDate(d.Date));
 
-    if (mouseoverGraphState) {
+    if (updateCategories) {
       updateSidebar(d);
       d3.select("#totalCrimes")
         .text(d.count + ' crimes committed in '+ parseFullDate(d.Date));
@@ -123,7 +128,7 @@ var graphs = function (data) {
   });
 
   var click = function () {
-    mouseoverGraphState = false;
+    updateCategories = false;
     var x0 = x.invert(d3.mouse(this)[0]),
       i = bisectDate(data, x0, 1),
       d0 = data[i - 1],
@@ -131,6 +136,10 @@ var graphs = function (data) {
       d = x0 - d0 > d1 - x0 ? d1 : d0;
 
     updateSidebar(d);
+
+    selectedMonth.attr("transform", "translate(" + x(d.Date) + "," + y(d.count) + ")");
+    selectedMonth.select("text").text(parseFullDate(d.Date));
+    selectedMonth.style("display", null);
 
     d3.select("#totalCrimes")
       .text(d.count + ' crimes committed in '+ parseFullDate(d.Date));
@@ -142,6 +151,7 @@ var graphs = function (data) {
       tick(date);
     }, 'date=' + parseDate(d.Date));
   };
+
   svg.append("rect")
     .attr("class", "overlay")
     .attr("width", width)
