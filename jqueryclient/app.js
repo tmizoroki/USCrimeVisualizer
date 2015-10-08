@@ -107,6 +107,7 @@ var renderPoints = function (data, callback) {
   // this is where the magic happens 
   // 'glues' the dots to the map
   // d3 is smart enough to know where to put the dots based on lat and longitude
+  var recomputedSize = size();
   svg.selectAll("circle")
     .remove()
     .data(data).enter()
@@ -120,7 +121,7 @@ var renderPoints = function (data, callback) {
       return projection(coord)[1]; 
     })
     .style("fill", function(d){return category_color(d.Category);})
-    .attr("r", 5/zoom.scale())
+    .attr("r", recomputedSize)
     .style("stroke-width", 0)
     .on("mouseover", function(d) {
         // render tooltip when hovering over a crime 
