@@ -12,14 +12,22 @@ var projection, now;
 // Zoom behavior of map
 var zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoomed);
 
+var size = function() {
+  return 4/zoom.scale() + 'px';
+}
+
+// Tool tip
+var tooltip = d3.select("body").append("div") 
+      .attr("class", "tooltip")       
+      .style("opacity", 0);
+
 // Zoom function
 function zoomed () {
-  var size = 3/zoom.scale() + 'px';
-
+  var recomputedSize = size();
   var g = d3.select("#mapcomp").selectAll("g");
   g.selectAll("circle").attr("r", function(d){
     if(d3.select(this).attr("r") !== '0px'){
-      return size;
+      return recomputedSize;
     } else {
       return '0px';
     }
@@ -93,9 +101,7 @@ var renderPoints = function (data, callback) {
   // add circles to svg
   var svg = d3.select("#datapoints");
   // tooltip element is invisible by default
-  var tooltip = d3.select("body").append("div") 
-      .attr("class", "tooltip")       
-      .style("opacity", 0);
+  
       
   // add dots to svg
   // this is where the magic happens 
@@ -114,7 +120,7 @@ var renderPoints = function (data, callback) {
       return projection(coord)[1]; 
     })
     .style("fill", function(d){return category_color(d.Category);})
-    .attr("r", 3/zoom.scale())
+    .attr("r", 5/zoom.scale())
     .style("stroke-width", 0)
     .on("mouseover", function(d) {
         // render tooltip when hovering over a crime 
@@ -130,9 +136,7 @@ var renderPoints = function (data, callback) {
         // make tooltip invisible when user stops hovering over dot  
         tooltip.transition()    
             .duration(500)    
-            .style("opacity", 0); 
-        // svg.selectAll('circle')
-        // .attr("r", ); //"3px");
+            .style("opacity", 0);
     })
     if (callback) {
       callback();

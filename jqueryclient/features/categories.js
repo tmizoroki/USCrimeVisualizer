@@ -20,22 +20,51 @@ var makeCategories = function (data) {
     $(".categories").append("<dd class=\"category\">" + value[0] + " " + value[1] + "</dd>");
   });
   // select svg from html
-  var svg = d3.select("#mapcomp");
+  //var svg = d3.select("#mapcomp");
   // on hover display only those crimes within that category
   $(".category").click(function () {
+    var svg = d3.select("#mapcomp");
+
     var category = $(this).text().split(" ")[0];
-    svg.selectAll("circle")
-    .each(function(d) {
-      if(d.Category !== category) {
-        d3.select(this).attr("r", "0px");
-      } else {
-        d3.select(this).attr("r", 3/zoom.scale()+"px");
+
+    svg.select("#datapoints").selectAll("circle").remove();
+    var svg = svg.select("#datapoints");
+    var filtered = [];
+    for(var i = 0; i < monthData.length; i++){
+      if(monthData[i].Category.split(" ")[0] === category){
+        filtered.push(monthData[i]);
       }
-    })
+    }
+
+    svg.selectAll("circle")
+          .data(filtered).enter()
+          .append("circle")
+          .attr("cx", function (d) {
+            coord = [d.X, d.Y];
+            return projection(coord)[0]; 
+          })
+          .attr("cy", function (d) { 
+            coord = [d.X, d.Y];
+            return projection(coord)[1]; 
+          })
+          .style("fill", function(d){return category_color(d.Category);})
+          .attr("r", size())
+          .style("stroke-width", 0)
+          .on("mouseover", function(d) {
+              // render tooltip when hovering over a crime 
+              tooltip.transition()  
+                 .duration(200)    
+                 .style("opacity", .9);    
+              tooltip.html("<p>"+d.Category+"</p>" + "<p>"+ d.Address+"</p>")
+
+                .style("left", (d3.event.pageX) + "px")   
+                .style("top", (d3.event.pageY - 28) + "px");
+              })          
+          .on("mouseout", function(d) {   
+              // make tooltip invisible when user stops hovering over dot  
+              tooltip.transition()    
+                  .duration(500)    
+                  .style("opacity", 0);
+          })
   });
-  // restore back to a map with all crimes on mouse leave
-  // $(".category").mouseleave(function () {
-  //   svg.selectAll("circle")
-  //   .attr("r", "3px");
-  // });
 };
