@@ -446,7 +446,6 @@ function tick (dtg) {
   var lastDay = new Date(year, month + 1, 0, 23, 59);
 
   // if play is pressed, then the clock will increase by one minute
-  console.log(playbackSpeed);
   if (play) {
       // if current date matches an event, render that event on screen
     if(now > firstDay && now < lastDay) {
