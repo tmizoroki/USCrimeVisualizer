@@ -37,7 +37,9 @@ function zoomed () {
 
 // we have a default playback speed for showing events
 // but it can be changed
-var playbackSpeed = 800;
+var playbackSpeed = 300;
+var order = 1;
+var initial;
 
 // another global variable play is set to false initially
 // when true, the animation will play
@@ -432,37 +434,59 @@ function tick (dtg) {
   }
 
 
+  var year = now.getFullYear();
+  var month = now.getMonth();
   hours = now.getHours();
   minutes = now.getMinutes();
   seconds = now.getSeconds();
 
   modifyClock(hours, minutes, seconds);
   modifySlider(hours, minutes);
+  var firstDay = new Date(year, month);
+  var lastDay = new Date(year, month + 1, 0, 23, 59);
 
   // if play is pressed, then the clock will increase by one minute
+  console.log(playbackSpeed);
   if (play) {
-    // if current date matches an event, render that event on screen
-    if (dataStorage[now]) {
-      renderPoints(dataStorage[now], function () {
-        setTimeout(function() {
-          tick(now.getTime() + 60000) // adding 60000 ms increases clock time by one minute
-        }, playbackSpeed); // animate the clock at speed of playbackSpeed
-      });
+      // if current date matches an event, render that event on screen
+    if(now > firstDay && now < lastDay) {
+      if (dataStorage[now]) {
+        renderPoints(dataStorage[now], function () {
+          setTimeout(function() {
+            tick(now.getTime() + (60000 * order)) // adding 60000 ms increases clock time by one minute
 
+          }, playbackSpeed); // animate the clock at speed of playbackSpeed
+        });
+
+      } else {
+        setTimeout(function() {
+          tick(now.getTime() + (60000 * order))
+        }, playbackSpeed);
+      }
     } else {
-      setTimeout(function() {
-        tick(now.getTime() + 60000)
-      }, playbackSpeed);
+      $("#play").toggle();
+      $("#pause").toggle();
+      play = !play;
+      order = order * -1;
     }
   }
 }
-
-// listener for increasing playback speed
-$("#speedup").on("click", function () {
-  // max playback speed is 50ms
-  if (playbackSpeed >= 50) {
-    playbackSpeed -= 200;
+$("#playbackSlider").on("input", function() {
+  //min 1000 max 1600 default 1300
+  if (this.value > 800) {
+    playbackSpeed = 800 - (this.value - 800);
+  } else {
+    playbackSpeed = 800 + (800 - this.value);
   }
+  
+});
+// listener for increasing playback speed
+$("#forward").on("click", function () {
+  order = 1;
+});
+
+$("#reverse").on("click", function () {
+  order = -1;
 })
 
 // play button will also have an on click event
@@ -473,8 +497,9 @@ d3.selectAll("#play, #pause").on("click", function () {
   $("#pause").toggle(); // pause is initially set to display: none in the css
   // if play is false, pressing play will set it to true, and vice versa
   play = !play;
-
   // call the tick function to turn on the clock
+  //add a minute to start to prevent rewinding into previous month
+  now = new Date(now.getTime() + 60000);
   tick(now);
 });
 
