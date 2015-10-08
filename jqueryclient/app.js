@@ -465,8 +465,6 @@ $("#speedup").on("click", function () {
   }
 })
 
-$("#slowdown")
-
 // play button will also have an on click event
 // the callback should set play to the opposite of what it was and relaunch tick function
 d3.selectAll("#play, #pause").on("click", function () {
