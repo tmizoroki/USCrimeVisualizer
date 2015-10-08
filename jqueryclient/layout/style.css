@@ -30,6 +30,12 @@ body, html {
   margin-left: -50%;
 }
 
+.spinner {
+  height: 32px;
+  width: 32px;
+  margin-left: 40%;
+}
+
 #graph {
   text-align: center;
 }

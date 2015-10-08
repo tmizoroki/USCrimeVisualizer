@@ -128,6 +128,9 @@ var graphs = function (data) {
   });
 
   var click = function () {
+    // show ajax spinner
+    d3.select('.spinner').style('visibility', 'visible');
+
     updateCategories = false;
     var x0 = x.invert(d3.mouse(this)[0]),
       i = bisectDate(data, x0, 1),
@@ -151,6 +154,7 @@ var graphs = function (data) {
       tick(date);
       d3.select("#datapoints").selectAll("circle").remove();
       renderPoints(monthData);
+      d3.select('.spinner').style('visibility', 'hidden');
     }, 'date=' + parseDate(d.Date));
   };
 

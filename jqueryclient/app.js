@@ -174,6 +174,9 @@ var render = function () {
   var width = .7 * window.innerWidth;
   var height = .9 * window.innerHeight;
   
+  // hide the ajax spinner until data is being loaded
+  d3.select('.spinner').style('visibility', 'hidden');
+
   // Creates the map svg
   var svg = d3.select('#map').append("svg").attr('id',"mapcomp")
   .attr("width", "70%").attr("height", "70%")
