@@ -49,6 +49,11 @@ var minToHHMM = function(min) {
   var minute = min % 60;
   return {hour: hour, minute: minute}
 };
+
+var hhmmToMin = function(hour, minute) {
+  return (hour * 60) + minute;
+}
+
 $('#time').on('input', function() {
   sliderTime =  minToHHMM(parseInt(this.value));
   modifyClock(sliderTime.hour, sliderTime.minute);
@@ -365,7 +370,7 @@ var category_color = function(category){
   }
 }
 
-function modifyClock (hours, minutes) {
+function modifyClock (hours, minutes, seconds) {
   // modifies the look of the clock as it increases
   digit = digit.data([hours / 10 | 0, hours % 10, minutes / 10 | 0, minutes % 10, seconds / 10 | 0, seconds % 10]);
   digit.select("path:nth-child(1)").classed("lit", function(d) { return digitPattern[0][d]; });
@@ -376,6 +381,11 @@ function modifyClock (hours, minutes) {
   digit.select("path:nth-child(6)").classed("lit", function(d) { return digitPattern[5][d]; });
   digit.select("path:nth-child(7)").classed("lit", function(d) { return digitPattern[6][d]; });
   separator.classed("lit", minutes);
+}
+
+function modifySlider (hour, minute) {
+  var min = hhmmToMin(hour, minute);
+  $('#time').val(min);
 }
 
 function tick (dtg) {
@@ -390,7 +400,8 @@ function tick (dtg) {
   minutes = now.getMinutes();
   seconds = now.getSeconds();
 
-  modifyClock(hours, minutes);
+  modifyClock(hours, minutes, seconds);
+  modifySlider(hours, minutes);
 
   // if play is pressed, then the clock will increase by one minute
   if (play) {
