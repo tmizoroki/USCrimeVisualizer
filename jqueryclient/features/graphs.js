@@ -149,7 +149,7 @@ var graphs = function (data) {
       var date = new Date(d.Date);
       storeData(data);
       tick(date);
-      d3.selectAll("#datapoints").remove();
+      d3.select("#datapoints").selectAll("circle").remove();
       renderPoints(monthData);
     }, 'date=' + parseDate(d.Date));
   };
