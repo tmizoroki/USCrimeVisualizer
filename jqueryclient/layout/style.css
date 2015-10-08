@@ -30,6 +30,10 @@ body, html {
   margin-left: -50%;
 }
 
+#playback {
+  width: 100px;
+}
+
 .spinner {
   height: 32px;
   width: 32px;
@@ -67,7 +71,6 @@ body, html {
 }
 
 #sidebar form {  
-  padding: 10px;
   border-radius: 2px;
 }
 
@@ -226,7 +229,7 @@ path:hover {
 
 #play, 
 #pause,
-#speedup {
+#forward, #reverse {
   cursor: pointer;
   text-decoration: none;
   color: white;
@@ -234,7 +237,7 @@ path:hover {
 
 #play:hover, 
 #pause:hover,
-#speedup:hover {
+#forward:hover, #reverse:hover{
   color: rgba(30, 136, 229, 0.85);
 }
 
