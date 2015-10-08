@@ -50,6 +50,7 @@ var monthData;
 
 var sliderTime = {hour: 0, minute: 0};
 var sliderMoved = false;
+var dateChanged = false;
 
 // converts value in range slider to hours and minutes.
 var minToHHMM = function(min) {
@@ -396,13 +397,40 @@ function modifySlider (hour, minute) {
   $('#time').val(min);
 }
 
+$('.datepicker').pickadate({
+    selectMonths: true, // Creates a dropdown to control month
+    selectYears: 15 // Creates a dropdown of 15 years to control year
+});
+
+var $input = $('.datepicker').pickadate()
+
+// Use the picker object directly.
+var picker = $input.pickadate('picker')
+
+picker.on('set', function (date) {
+  dateChanged = true;
+});
+
+function setDate(date) {
+  picker.set('select', date);
+  dateChanged = true;
+}
+
 function tick (dtg) {
-  now = new Date(dtg);
+  if (dateChanged) {
+    now = new Date(dtg);
+    var date = picker.get('select');
+    now.setFullYear(date.year, date.month, date.date)
+    dateChanged = false;
+  } else {
+    now = new Date(dtg);
+  }
 
   if (sliderMoved) {
     now.setHours(sliderTime.hour, sliderTime.minute);
     sliderMoved = false;
   }
+
 
   hours = now.getHours();
   minutes = now.getMinutes();
@@ -437,6 +465,7 @@ $("#speedup").on("click", function () {
   }
 })
 
+$("#slowdown")
 
 // play button will also have an on click event
 // the callback should set play to the opposite of what it was and relaunch tick function
