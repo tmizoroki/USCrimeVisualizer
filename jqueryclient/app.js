@@ -86,7 +86,7 @@ var renderPoints = function (data, callback) {
   // with different params 
   var coord;
   // add circles to svg
-  var svg = d3.select("#map").selectAll("svg").append("g").attr("id","datapoints");
+  var svg = d3.select("#datapoints");
   // tooltip element is invisible by default
   var tooltip = d3.select("body").append("div") 
       .attr("class", "tooltip")       
@@ -129,8 +129,9 @@ var renderPoints = function (data, callback) {
         // svg.selectAll('circle')
         // .attr("r", ); //"3px");
     })
-
-  callback();
+    if (callback) {
+      callback();
+    }
 };
 
 // this function is currently not used
@@ -189,12 +190,15 @@ var render = function () {
   projection.scale(scale).translate(transl);
   // shows district information on top of map when hovering over it
   svg.append("g")
-      .attr("id","grouped").
-      selectAll("path").data(gsfmap.features).enter().append("path").attr("d", path).attr('data-id', function(d) {
+      .attr("id","grouped")
+      .selectAll("path").data(gsfmap.features).enter().append("path").attr("d", path).attr('data-id', function(d) {
     return d.id;
   }).attr('data-name', function(d) {
     return d.properties.name;
   });
+
+  d3.select("#mapcomp").append("g")
+    .attr("id","datapoints");
 
 
 
@@ -375,7 +379,6 @@ function modifyClock (hours, minutes) {
 }
 
 function tick (dtg) {
-
   now = new Date(dtg);
 
   if (sliderMoved) {
@@ -424,6 +427,7 @@ d3.selectAll("#play, #pause").on("click", function () {
   $("#pause").toggle(); // pause is initially set to display: none in the css
   // if play is false, pressing play will set it to true, and vice versa
   play = !play;
+
   // call the tick function to turn on the clock
   tick(now);
 });
