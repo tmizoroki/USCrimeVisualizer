@@ -131,6 +131,7 @@ var graphs = function (data) {
     // show ajax spinner
     d3.select('.spinner').style('visibility', 'visible');
 
+
     updateCategories = false;
     var x0 = x.invert(d3.mouse(this)[0]),
       i = bisectDate(data, x0, 1),
@@ -139,6 +140,8 @@ var graphs = function (data) {
       d = x0 - d0 > d1 - x0 ? d1 : d0;
 
     updateSidebar(d);
+
+    setDate(d.Date);
 
     selectedMonth.attr("transform", "translate(" + x(d.Date) + "," + y(d.count) + ")");
     selectedMonth.select("text").text(parseFullDate(d.Date));
