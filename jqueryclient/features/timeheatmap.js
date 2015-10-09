@@ -65,20 +65,20 @@ var heatit = function() {
      .data(days)
      .enter().append("text")
      .text(function (d) { return d; })
-     .attr("x", 0)
-     .attr("y", function (d, i) { return i * gridSize; })
+     .attr("x", -40)
+     .attr("y", function (d, i) { return i * gridSize + 15; })
      .style("text-anchor", "end")
-     .attr("transform", "translate(-6," + gridSize / 1.5 + ")")
+     // .attr("transform", "translate(-6," + gridSize / 1.5 + ")")
      .attr("class", function (d, i) { return ((i >= 0 && i <= 4) ? "dayLabel mono axis axis-workweek" : "dayLabel mono axis"); });
      
     var timeLabels = svg.selectAll(".timeLabel")
      .data(times)
      .enter().append("text")
      .text(function(d) { return d; })
-     .attr("x", function(d, i) { return i * gridSize; })
-     .attr("y", 0)
+     .attr("x", function(d, i) { return i * gridSize - 20; })
+     .attr("y", -10)
      .style("text-anchor", "middle")
-     .attr("transform", "translate(" + gridSize / 2 + ", -6)")
+     // .attr("transform", "translate(" + gridSize / 2 + ", -6)")
      .attr("class", function(d, i) { return ((i >= 7 && i <= 16) ? "timeLabel mono axis axis-worktime" : "timeLabel mono axis"); });
 
     var heatMap = svg.selectAll(".hour")
@@ -93,7 +93,7 @@ var heatit = function() {
      .attr("height", gridSize)
      .style("fill", colors[0]);
 
-    heatMap.transition().duration(10000)
+    heatMap.transition().duration(5000)
       .style("fill", function(d) { return colors[classify(d.value)] ; });
 
     heatMap.append("title").text(function(d) { return d.value; });
