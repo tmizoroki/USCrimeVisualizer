@@ -82,6 +82,7 @@ var storeData = function (data) {
     }
   }
   monthData = data;
+  heatit();
   // return data;
 }
 
@@ -142,7 +143,7 @@ var renderPoints = function (data, callback) {
             .duration(500)    
             .style("opacity", 0);
     })
-    //heatit();
+
     if (callback) {
       callback();
     }
