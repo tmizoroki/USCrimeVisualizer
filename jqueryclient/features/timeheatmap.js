@@ -93,7 +93,7 @@ var heatit = function() {
      .attr("height", gridSize)
      .style("fill", colors[0]);
 
-    heatMap.transition().duration(1000)
+    heatMap.transition().duration(10000)
       .style("fill", function(d) { return colors[classify(d.value)] ; });
 
     heatMap.append("title").text(function(d) { return d.value; });
