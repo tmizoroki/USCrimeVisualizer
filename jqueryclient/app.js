@@ -52,7 +52,7 @@ var monthData;
 
 var sliderTime = {hour: 0, minute: 0};
 var sliderMoved = false;
-var dateChanged = false;
+// var dateChanged = false;
 
 // converts value in range slider to hours and minutes.
 var minToHHMM = function(min) {
@@ -409,30 +409,27 @@ var $input = $('.datepicker').pickadate()
 // Use the picker object directly.
 var picker = $input.pickadate('picker')
 
-picker.on('set', function (date) {
-  dateChanged = true;
-});
 
 function setDate(date) {
   picker.set('select', date);
-  dateChanged = true;
 }
 
 function tick (dtg) {
-  if (dateChanged) {
-    now = new Date(dtg);
-    var date = picker.get('select');
-    now.setFullYear(date.year, date.month, date.date)
-    dateChanged = false;
-  } else {
-    now = new Date(dtg);
+  now = new Date(dtg);
+
+  if (now.getMinutes() === 0 && now.getHours() === 0) {
+    setDate(now);
   }
+
+  // Grab the date from the calendar and store it in "date"
+  var date = picker.get('select');
+
+  now.setFullYear(date.year, date.month, date.date)
 
   if (sliderMoved) {
     now.setHours(sliderTime.hour, sliderTime.minute);
     sliderMoved = false;
   }
-
 
   var year = now.getFullYear();
   var month = now.getMonth();
@@ -440,15 +437,21 @@ function tick (dtg) {
   minutes = now.getMinutes();
   seconds = now.getSeconds();
 
+  // Change the clock's display to the current time
   modifyClock(hours, minutes, seconds);
+
+  // Change the slider's position based on the current time.
   modifySlider(hours, minutes);
+
+  // Set the current month's boundries, 00:00 of the first day to 23:59 of the last day
   var firstDay = new Date(year, month);
   var lastDay = new Date(year, month + 1, 0, 23, 59);
 
-  // if play is pressed, then the clock will increase by one minute
+  // check if play is pressed
   if (play) {
-      // if current date matches an event, render that event on screen
+
     if(now > firstDay && now < lastDay) {
+      //if there is data for that specific minute
       if (dataStorage[now]) {
         renderPoints(dataStorage[now], function () {
           setTimeout(function() {
