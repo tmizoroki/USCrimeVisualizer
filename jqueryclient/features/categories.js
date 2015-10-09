@@ -23,6 +23,12 @@ var makeCategories = function (data) {
   //var svg = d3.select("#mapcomp");
   // on hover display only those crimes within that category
   $(".category").click(function () {
+    // change selected category
+    d3.selectAll('.category.selectedCat')
+      .classed('selectedCat', false);
+
+    d3.select(this).classed('selectedCat', true);
+
     var svg = d3.select("#mapcomp");
 
     var category = $(this).text().split(" ")[0];
