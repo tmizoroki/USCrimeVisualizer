@@ -20,7 +20,7 @@ var size = function() {
 var tooltip = d3.select("body").append("div") 
       .attr("class", "tooltip")       
       .style("opacity", 0);
-
+ 
 // Zoom function
 function zoomed () {
   var recomputedSize = size();
