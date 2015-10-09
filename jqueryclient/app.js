@@ -448,7 +448,7 @@ function tick (dtg) {
   // Set the current month's boundries, 00:00 of the first day to 23:59 of the last day
   var firstDay = new Date(year, month);
   var lastDay = new Date(year, month + 1, 0, 23, 59);
-
+  
   // check if play is pressed
   if (play) {
 
