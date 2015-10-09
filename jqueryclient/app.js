@@ -403,6 +403,7 @@ function modifySlider (hour, minute) {
 $('.datepicker').pickadate({
     selectMonths: true, // Creates a dropdown to control month
     selectYears: 15 // Creates a dropdown of 15 years to control year
+
 });
 
 var $input = $('.datepicker').pickadate()
@@ -428,6 +429,7 @@ function tick (dtg) {
   now.setFullYear(date.year, date.month, date.date)
 
   if (sliderMoved) {
+
     now.setHours(sliderTime.hour, sliderTime.minute);
     sliderMoved = false;
   }
@@ -471,9 +473,11 @@ function tick (dtg) {
       $("#pause").toggle();
       play = !play;
       order = order * -1;
+
     }
   }
 }
+
 $("#playbackSlider").on("input", function() {
   //min 1000 max 1600 default 1300
   if (this.value > 800) {
@@ -483,7 +487,8 @@ $("#playbackSlider").on("input", function() {
   }
   
 });
-// listener for increasing playback speed
+
+//listener to change direction of slider
 $("#forward").on("click", function () {
   order = 1;
 });
@@ -502,7 +507,7 @@ d3.selectAll("#play, #pause").on("click", function () {
   play = !play;
   // call the tick function to turn on the clock
   //add a minute to start to prevent rewinding into previous month
-  now = new Date(now.getTime() + 60000);
+  now = new Date(now.getTime() + (60000 * order));
   tick(now);
 });
 
