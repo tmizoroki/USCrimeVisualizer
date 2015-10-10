@@ -78,7 +78,6 @@ var getData = function (callback, params) {
 /* SLIDER */
 var sliderTime = {hour: 0, minute: 0};
 var sliderMoved = false;
-// var dateChanged = false;
 
 // converts value in range slider to hours and minutes.
 var minToHHMM = function(min) {
@@ -339,15 +338,16 @@ function modifyClock (hours, minutes, seconds) {
   separator.classed("lit", minutes);
 }
 
+// The slider thumb updates it's position relative to the time of day
 function modifySlider (hour, minute) {
   var min = hhmmToMin(hour, minute);
   $('#time').val(min);
 }
 
+// Date picker configuration
 $('.datepicker').pickadate({
-    selectMonths: true, // Creates a dropdown to control month
-    selectYears: 15 // Creates a dropdown of 15 years to control year
-
+    selectMonths: false,
+    selectYears: false // Creates a dropdown of 15 years to control year
 });
 
 var $input = $('.datepicker').pickadate();
@@ -355,13 +355,18 @@ var $input = $('.datepicker').pickadate();
 // Use the picker object directly.
 var picker = $input.pickadate('picker');
 
+// Set the datepicker date
 function setDate(date) {
   picker.set('select', date);
 }
 
+
 function tick (dtg) {
   now = new Date(dtg);
 
+  // Reset the datepicker calendar date only when the clock reads 00:00
+  // so that when the the current time moves past the end of a day the
+  // day change is reflected in the calendar.
   if (now.getMinutes() === 0 && now.getHours() === 0) {
     setDate(now);
   }
@@ -369,8 +374,11 @@ function tick (dtg) {
   // Grab the date from the calendar and store it in "date"
   var date = picker.get('select');
 
+  // Reset "now" with the calender date so that if a different day is chosen
+  // on datepicker the correct data for that date is shown.
   now.setFullYear(date.year, date.month, date.date);
 
+  // Reset the current time every time the slider is being moved.
   if (sliderMoved) {
     now.setHours(sliderTime.hour, sliderTime.minute);
     sliderMoved = false;
@@ -378,9 +386,9 @@ function tick (dtg) {
 
   var year = now.getFullYear();
   var month = now.getMonth();
-  hours = now.getHours();
-  minutes = now.getMinutes();
-  seconds = now.getSeconds();
+  var hours = now.getHours();
+  var minutes = now.getMinutes();
+  var seconds = now.getSeconds();
 
   // Change the clock's display to the current time
   modifyClock(hours, minutes, seconds);
@@ -449,8 +457,6 @@ d3.selectAll("#play, #pause").on("click", function () {
   now = new Date(now.getTime() + (60000 * order));
   tick(now);
 });
-
-
 
 // render the map on screen when the app loads
 render();
