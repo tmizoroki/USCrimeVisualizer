@@ -17,23 +17,13 @@
 
         <div id="district">District</div>
 
-        <a id="reverse"><i class="small material-icons">fast_rewind</i></a>
-        <a id="play"><i class="small material-icons">play_arrow</i></a>
-        <a id="pause"><i class="small material-icons">pause</i></a>
-        <a id="forward"><i class="small material-icons">fast_forward</i></a>
-        
-        <div>
-          <form action="#" id="playback">
-            <p class="range-field">
-              <input type="range" id="playbackSlider" min="1000" value="1300" max="1600" list="speedChoice"/>
-            </p>
-          </form>
-        </div>
         <div id="city">
+
           <div id="zoomButtons">
+            <legend>Map Zoom</legend>
             <ul>
-            <li><button id="zoom_in" class="zoom">+</button></li>
-            <li><button id="zoom_out" class="zoom">-</button></li>
+              <li><button id="zoom_in" class="zoom">+</button></li>
+              <li><button id="zoom_out" class="zoom">-</button></li>
             </ul>
           </div>
         </div>
@@ -95,16 +85,37 @@
             </g>
             <img src="./assets/ajax-loader.gif" class="spinner" alt="Loading data">
           </svg>
-          <input type="date" class="datepicker">
-          <form action="#">
-            <p class="range-field">
-              <input type="range" id="time" min="0" value="0" max="1439" />
-            </p>
-          </form>
+          <div class="col s9">
+            <input type="date" class="datepicker">
+            <form action="#">
+              <legend>Time of Day</legend>
+              <p class="range-field">
+                <input type="range" id="time" min="0" value="0" max="1439" />
+              </p>
+            </form>
+          </div>
         </div>
 
         <div class="row">
           <div id="map" class="col s9"></div>
+
+          <div id="playbackCtrl" class="col s3">
+            <div id="playbackButtons">
+              <a id="reverse"><i class="small material-icons">fast_rewind</i></a>
+              <a id="play"><i class="small material-icons">play_arrow</i></a>
+              <a id="pause"><i class="small material-icons">pause</i></a>
+              <a id="forward"><i class="small material-icons">fast_forward</i></a>
+            </div>
+
+            <div id="playbackSpeedRange">
+              <form action="#" id="playback">
+                <legend>Speed</legend>
+                <p class="range-field">
+                  <input type="range" id="playbackSlider" min="1000" value="1300" max="1600" list="speedChoice"/>
+                </p>
+              </form>
+            </div>
+          </div>
           <div id="legend" class="col s3">
             <h5>Legend</h5>
             <svg height="10rem">

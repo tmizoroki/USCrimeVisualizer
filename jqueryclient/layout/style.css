@@ -41,7 +41,8 @@ body, html {
 }
 
 #clockboard, #clock {
-  margin-left: -50%;
+  margin-top: 1.2%;
+  margin-left: -54%;
 }
 
 #playback {
@@ -336,4 +337,18 @@ text.mono {
     font-family: Consolas, courier;
     fill: #aaa;
 }
+
+#playbackCtrl {
+  padding-left: 15px;
+}
+
+.range-field {
+  margin-top: 0;
+}
+
+#playbackButtons {
+  margin-bottom: 10px
+}
+
+
 
