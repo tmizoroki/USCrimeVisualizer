@@ -450,5 +450,7 @@ d3.selectAll("#play, #pause").on("click", function () {
   tick(now);
 });
 
+
+
 // render the map on screen when the app loads
 render();
